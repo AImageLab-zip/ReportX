@@ -111,7 +111,7 @@ if __name__ == '__main__':
     dataset = AtlasDataset(image_path=args.input_path)
     loader = torch.utils.data.DataLoader(dataset=dataset,
                                          shuffle=False,
-                                         num_workers=8,
+                                         num_workers=32,
                                          drop_last=False,
                                          pin_memory=False,
                                          batch_size=1)

@@ -5,11 +5,9 @@ import threading
 import time
 import traceback
 
-import httpx
 import numpy as np
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from openai import OpenAI
 
 from tqdm import tqdm
 from typing import Dict, List, Optional
@@ -37,7 +35,7 @@ def compute_radfact(
     temperature:float = 0.0
 ) -> Dict[str, float]:
     """
-    Compute RadFact score. Support Ollama and OpenAI.
+    Compute RadFact score using Ollama.
     Args:
         predictions: List of predicted texts
         references: List of reference texts
@@ -112,35 +110,10 @@ def _compute_radfact(
             except Exception as e:
                 print(f"Warning: Could not save cache: {e}")
     
-    # No Ollama url => OpenAI
-    use_ollama = ollama_url is not None
-    
-    if use_ollama:
-        # Ollama setup
-        print(f"Using Ollama model '{radfact_model}' at {ollama_url}, temp = {temperature}",flush=True)
-        client = "ollama"
-    else:
-        # OpenAI setup
-        assert os.getenv('OPENAI_API_KEY'), "OPENAI_API_KEY missing"
-        try:
-            http_client = httpx.Client(
-                timeout=httpx.Timeout(60.0, connect=10.0),
-                follow_redirects=True
-            )
-            client = OpenAI(
-                api_key=os.getenv('OPENAI_API_KEY'),
-                http_client=http_client
-            )
-        except TypeError as e:
-            client = OpenAI(
-                api_key=os.getenv('OPENAI_API_KEY'),
-                max_retries=3,
-                timeout=60.0
-            )
+    assert ollama_url is not None, "ollama_url is required"
+    print(f"Using Ollama model '{radfact_model}' at {ollama_url}, temp = {temperature}", flush=True)
     
     # Helper function to make API call with rate limiting
-    # OpenAI has some rate_limit_rpm (check the dashboard) that changes based on account
-    # level and the model used. Check them.
     api_call_times = []
     api_lock = threading.Lock()
     
@@ -175,71 +148,30 @@ def _compute_radfact(
         
         while retry_count <= max_retries:
             try:
-                if client == "ollama":
-                    data = {
-                        "model": radfact_model,
-                        "messages": [{"role": "user", "content": prompt}],
-                        "stream": False,
-                        "options": {
-                            "temperature": temperature
-                        }
+                data = {
+                    "model": radfact_model,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "stream": False,
+                    "options": {
+                        "temperature": temperature
                     }
-                    resp = requests.post(
-                        f"{ollama_url}/api/chat",
-                        json=data,
-                        timeout=120
-                    )
-                    resp.raise_for_status()
-                    result = resp.json()
-                    content = result['message']['content'].strip()
-                    prompt_tokens = result["prompt_eval_count"]
-                    completion_tokens = result["eval_count"]
-                    total_tokens = prompt_tokens + completion_tokens
-                    NUM_TOKENS+=total_tokens
-                    if not content:
-                        raise ValueError(f"Empty response from Ollama API (model: {radfact_model})")
+                }
+                resp = requests.post(
+                    f"{ollama_url}/api/chat",
+                    json=data,
+                    timeout=120
+                )
+                resp.raise_for_status()
+                result = resp.json()
+                content = result['message']['content'].strip()
+                prompt_tokens = result["prompt_eval_count"]
+                completion_tokens = result["eval_count"]
+                total_tokens = prompt_tokens + completion_tokens
+                NUM_TOKENS += total_tokens
+                if not content:
+                    raise ValueError(f"Empty response from Ollama API (model: {radfact_model})")
 
-                    return content
-                else:
-                    api_key = os.getenv('OPENAI_API_KEY')
-                    if not api_key:
-                        raise ValueError("OPENAI_API_KEY environment variable not set")
-                    
-                    headers = {
-                        "Authorization": f"Bearer {api_key}",
-                        "Content-Type": "application/json"
-                    }
-                    is_gpt5_plus = "gpt-5" in radfact_model.lower()
-                    token_param = "max_completion_tokens" if is_gpt5_plus else "max_tokens"
-                    data = {
-                        "model": radfact_model,
-                        "messages": [{"role": "user", "content": prompt}],
-                        token_param: 4096
-                    }
-                    if not is_gpt5_plus:
-                        data["temperature"] = 0.0
-                    
-                    resp = requests.post(
-                        "https://api.openai.com/v1/chat/completions",
-                        headers=headers,
-                        json=data,
-                        timeout=1000
-                    )
-                    resp.raise_for_status()
-                    result = resp.json()
-                    
-                    if 'error' in result:
-                        raise ValueError(f"API error: {result['error']}")
-                    
-                    if 'choices' not in result or not result['choices']:
-                        raise ValueError(f"No choices in API response: {result}")
-                    
-                    content = result['choices'][0]['message']['content'].strip()
-                    
-                    if not content:
-                        raise ValueError(f"Empty response from OpenAI API (model: {radfact_model})")
-                    
-                    return content
+                return content
                     
             except requests.exceptions.Timeout as e:
                 last_error = TimeoutError(f"API request timed out: {e}")

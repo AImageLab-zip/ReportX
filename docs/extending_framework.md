@@ -1,0 +1,77 @@
+
+## Quick Start and Usage Examples
+
+The following are some base examples. You can add other CLI parameters useful for your main.py (which must be the entrypoint for training).
+
+### Command Line Arguments
+
+Command line arguments implemented in the provided main.py file:
+
+- `--config`: Path to configuration JSON file (required)
+- `--epochs`: Number of training epochs (required)
+- `--save_path`: Directory to save model checkpoints (required)
+- `--trainer`: Trainer class name (required)
+- `--validation`: Enable validation during training (flag)
+- `--val_every`: Run validation every N epochs (default: 1)
+- `--resume`: Resume training from last checkpoint (flag)
+- `--debug`: Enable debug mode with verbose output (flag)
+- `--eval_metric_type`: Metric type for model selection - `mean` (per-class mean) or `aggregated_mean` (aggregated regions mean) (default: `mean`)
+- `--wandb`: Enable Weights & Biases logging (flag). Run name will be `config.name`. Set project and entity with environment variables: `export WANDB_ENTITY="your_entity"` and `export WANDB_PROJECT="your_project"`
+- `--mixed_precision`: Enable mixed precision training: `fp16` or `bf16` (default: None, so training is performed with FP32 precision)
+- `--seed`: random seed for reproducibility (default: 42)
+
+Example of launch of main.py, training a 3D segmentation model, resuming checkpoints,
+
+```bash
+source /path_to_your_venv/bin/activate
+export WANDB_ENTITY="name_of_your_entity"
+export WANDB_PROJECT="name_of_your_project"
+
+python main.py \
+  --config config/config_atlas.json \
+  --epochs 100 \
+  --save_path /folder_containing_model_last.pth \
+  --trainer Trainer_3D \
+  --validation \
+  --val_every 2 \
+  --resume \
+  --wandb
+```
+
+### Implement Your Own Training
+
+To set up a complete training pipeline, follow these steps:
+
+- [**Create a Dataset Class**](datasets/README.md#creating-a-new-dataset): Inherit from [BaseDataset](base/README.md#base-datasetpy) or [BaseDataset2DSliced](base/README.md#base-dataset2d-slicedpy) and implement the required abstract methods.
+
+- [**Implement a Model**](models/README.md#adding-custom-models): Create your custom model by inheriting from [BaseModel](base/README.md#base-modelpy) and implementing the `forward()` method.
+
+- [**Implement a Trainer**](trainer/README.md#implementing-a-custom-trainer): Create a custom trainer by inheriting from [BaseTrainer](base/README.md#base-trainerpy) and implementing `_train_epoch()` and `eval_epoch()` methods.
+
+- **Create an Entrypoint**: Write a `main.py` file that loads your configuration and instantiates your trainer. Use the provided [main.py](main.py) as a template or reference.
+
+---
+
+## Detailed Components
+
+For detailed documentation on each component, refer to the README files in their respective directories:
+
+- **[Base Classes](base/README.md)** - Abstract base classes for datasets, models, and trainers
+- **[Configuration](config/README.md)** - JSON configuration files for training and transforms
+- **[Datasets](datasets/README.md)** - Dataset loading and preprocessing
+- **[Losses](losses/README.md)** - Loss function implementations
+- **[Metrics](metrics/README.md)** - Metrics computation and tracking
+- **[Models](models/README.md)** - Model architectures
+- **[Optimizers](optimizers/README.md)** - Optimizer configurations
+- **[Trainers](trainer/README.md)** - Training logic
+- **[Transforms](transforms/README.md)** - Data augmentation and preprocessing
+- **[Utils](utils/README.md)** - Utility functions
+
+---
+
+## Notes
+
+- For patch-based training with 3D volumes, the framework uses TorchIO's Queue and GridSampler.
+- Metrics are automatically computed per-class and averaged.
+- Checkpoints are saved as `model_last.pth` and `model_best.pth` in the folder specified by the parameter --save_path.
+- The framework is compatible with PyTorch 2.3+ and uses TorchIO's SubjectsLoader for proper data handling.

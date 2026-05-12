@@ -1,7 +1,10 @@
 # ReportX: The BraTS Clinical Report Dataset
 
 This is the repository of BraTS-ReportX, a paired resource of 257 clinical reports aligned to BraTS subjects, structured into a rich set of qualitative and quantitative attributes. 
-This repository contains code for: (1) automatic generation of quantitative report attributes from BraTS data, including anatomical localization and geometric measurements; (2) report encoding with biomedical language models; (3) evaluating the semantic coverage and overall quality of the dataset, supporting analyses of how well BraTS-ReportX captures clinically relevant report information compared with existing resources; and (4) training and testing of the proposed vision-text alignment framework for 3D tumor segmentation. 
+This repository contains code for:
+1. Automatic generation of quantitative report attributes from BraTS data, including anatomical localization and geometric measurements; 
+2. Report encoding with biomedical language models;
+3. Evaluating the semantic coverage and overall quality of the dataset, supporting analyses of how well BraTS-ReportX captures clinically relevant report information compared with existing resources; and (4) training and testing of the proposed vision-text alignment framework for 3D tumor segmentation. 
 The codebase is designed to support reproducibility and further research on integrating structured clinical semantics into medical image segmentation.
 
 <p align="center">
@@ -39,159 +42,37 @@ The codebase is designed to support reproducibility and further research on inte
   - [Jobs](jobs/README.md)
 - [Notes](#notes)
 
-## Project Structure
-
-```
-Brain-Segmentation/
-├── base/                    # Abstract base classes
-│   ├── base_dataset2d_sliced.py
-│   ├── base_dataset.py
-│   ├── base_model.py
-│   └── base_trainer.py
-├── config/                  # Configuration files for training and transforms
-│   ├── config_atlas.json
-│   ├── atlas_transforms.json
-│   └── ...
-├── datasets/                # Dataset loading and preprocessing (inherited from base_datasets)
-│   ├── DatasetFactory.py
-│   ├── ATLAS.py
-│   └── BraTS2D.py
-├── losses/                  # Loss function implementations
-│   └── LossFactory.py
-├── metrics/                 # Metrics computation and tracking
-│   ├── MetricsFactory.py
-│   └── MetricsManager.py
-├── models/                  # Model architectures (inherited from base_model)
-│   ├── ModelFactory.py
-│   ├── UNet2D.py
-│   └── UNet3D.py
-├── optimizers/              # Optimizer configurations
-│   └── OptimizerFactory.py
-├── trainer/                 # Training logic (inherited from base_trainer)
-│   ├── trainer_2Dsliced.py
-│   └── trainer_3D.py
-├── transforms/              # Data augmentation and preprocessing
-│   └── TransformsFactory.py
-├── utils/                   # Utility functions
-│   ├── util.py
-│   └── pad_unpad.py
-├── scripts/                 # Utility scripts (e.g., text embeddings)
-│   └── extract_textemb_biobert.py
-│   └── preprocess_qatacov.py
-├── report_generation/       # Code for report generation and evaluation
-│   ├── agreement
-│   │   ├── radfact.py
-│   │   ├── radfact-70b
-│   │   ├── run-auto-agreement.py
-│   │   └── run-radfact-agreement.py
-│   ├── autogen
-│   │   ├── fill_atlas.py
-│   │   ├── generate_atlas.py
-│   │   ├── generate_eloquent.py
-│   │   ├── generate_reports
-│   │   └── run_cc_segmentation.py
-│   ├── utils
-│   │   ├── data.py
-│   │   ├── geometries.py
-│   │   └── jsonify.py
-│   └── README.md
-├── config.py                # Config file handler
-├── main.py                  # Training entry point
-└── requirements.txt         # Python dependencies
-```
+The project structure is available [here](/docs/structure.md).
 
 ## Installation
-This project was run and tested on python 3.11, cuda 
 1. Clone the repository:
 ```bash
-git clone https://github.com/kev98/Medical-Image-Segmentation.git
-cd Medical-Image-Segmentation
+git clone https://github.com/AImageLab-zip/Report-Guided-Segmentation
+cd Report-Guided-Segmentation
 ```
 
-2. Create and activate a virtual environment:
+2. Create a virtual environment and install dependencies:
 ```bash
-python3.11 -m venv .venv
+uv sync --no-cache
+```
+
+3. Activate the environment
+```bash
 source .venv/bin/activate
 ```
+## Supported Pipelines:
+1. [Segmentation Model Training](/docs/training.md)
+2. [Segmentation Model Testing](/docs/testing.md)
+3. [Automatic Report Generation](/docs/report_gen.md)
+4. [Agreement](/docs/agreement.md)
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## Training 
+todo
+## Testing
+todo
 
-## Quick Start and Usage Examples
 
-The following are some base examples. You can add other CLI parameters useful for your main.py (which must be the entrypoint for training).
 
-### Command Line Arguments
 
-Command line arguments implemented in the provided main.py file:
-
-- `--config`: Path to configuration JSON file (required)
-- `--epochs`: Number of training epochs (required)
-- `--save_path`: Directory to save model checkpoints (required)
-- `--trainer`: Trainer class name (required)
-- `--validation`: Enable validation during training (flag)
-- `--val_every`: Run validation every N epochs (default: 1)
-- `--resume`: Resume training from last checkpoint (flag)
-- `--debug`: Enable debug mode with verbose output (flag)
-- `--eval_metric_type`: Metric type for model selection - `mean` (per-class mean) or `aggregated_mean` (aggregated regions mean) (default: `mean`)
-- `--wandb`: Enable Weights & Biases logging (flag). Run name will be `config.name`. Set project and entity with environment variables: `export WANDB_ENTITY="your_entity"` and `export WANDB_PROJECT="your_project"`
-- `--mixed_precision`: Enable mixed precision training: `fp16` or `bf16` (default: None, so training is performed with FP32 precision)
-- `--seed`: random seed for reproducibility (default: 42)
-
-Example of launch of main.py, training a 3D segmentation model, resuming checkpoints,
-
-```bash
-source /path_to_your_venv/bin/activate
-export WANDB_ENTITY="name_of_your_entity"
-export WANDB_PROJECT="name_of_your_project"
-
-python main.py \
-  --config config/config_atlas.json \
-  --epochs 100 \
-  --save_path /folder_containing_model_last.pth \
-  --trainer Trainer_3D \
-  --validation \
-  --val_every 2 \
-  --resume \
-  --wandb
-```
-
-### Implement Your Own Training
-
-To set up a complete training pipeline, follow these steps:
-
-- [**Create a Dataset Class**](datasets/README.md#creating-a-new-dataset): Inherit from [BaseDataset](base/README.md#base-datasetpy) or [BaseDataset2DSliced](base/README.md#base-dataset2d-slicedpy) and implement the required abstract methods.
-
-- [**Implement a Model**](models/README.md#adding-custom-models): Create your custom model by inheriting from [BaseModel](base/README.md#base-modelpy) and implementing the `forward()` method.
-
-- [**Implement a Trainer**](trainer/README.md#implementing-a-custom-trainer): Create a custom trainer by inheriting from [BaseTrainer](base/README.md#base-trainerpy) and implementing `_train_epoch()` and `eval_epoch()` methods.
-
-- **Create an Entrypoint**: Write a `main.py` file that loads your configuration and instantiates your trainer. Use the provided [main.py](main.py) as a template or reference.
-
----
-
-## Detailed Components
-
-For detailed documentation on each component, refer to the README files in their respective directories:
-
-- **[Base Classes](base/README.md)** - Abstract base classes for datasets, models, and trainers
-- **[Configuration](config/README.md)** - JSON configuration files for training and transforms
-- **[Datasets](datasets/README.md)** - Dataset loading and preprocessing
-- **[Losses](losses/README.md)** - Loss function implementations
-- **[Metrics](metrics/README.md)** - Metrics computation and tracking
-- **[Models](models/README.md)** - Model architectures
-- **[Optimizers](optimizers/README.md)** - Optimizer configurations
-- **[Trainers](trainer/README.md)** - Training logic
-- **[Transforms](transforms/README.md)** - Data augmentation and preprocessing
-- **[Utils](utils/README.md)** - Utility functions
-
----
-
-## Notes
-
-- For patch-based training with 3D volumes, the framework uses TorchIO's Queue and GridSampler.
-- Metrics are automatically computed per-class and averaged.
-- Checkpoints are saved as `model_last.pth` and `model_best.pth` in the folder specified by the parameter --save_path.
-- The framework is compatible with PyTorch 2.3+ and uses TorchIO's SubjectsLoader for proper data handling.
+## Extending
+This is a fork of a universal framework from https://github.com/kev98/Medical-Image-Segmentation. An overview on using and extending it with your own implementation can be found [here](/docs/extending_framework.md)

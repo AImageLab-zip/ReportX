@@ -6,7 +6,7 @@ import nibabel as nib
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from torch.utils.data.dataloader import default_collate
-from src.utils.geometries import process_volume
+from report_generation.utils.geometries import process_volume
 import json
 import numpy as np
 import traceback
@@ -132,174 +132,6 @@ def convert_to_text(data):
         if lesion['type'] == 'isolated_edema':
             text += name + 'is ' + isolated_ed_to_text(lesion['centers'][0])  + '\n\n'
     return text
-
-class InternalDataset(torch.utils.data.Dataset):
-    def __init__(self, image_path:Path = Path('/work/grana_neuro/BrainToText/internal_dataset_ln/'),
-                 label_path:Path=Path('/work/grana_neuro/MRI_neuro_internal_dataset_final/plane_annotations.csv'),
-                 augment:bool=True,
-                 clamp:bool = True,
-                 norm:bool = True,
-                 resize:bool=False,
-                 return_metadata:bool=False,
-                 include_ventricles:bool=False):
-        
-        with open(label_path,newline='') as f:
-            reader = csv.reader(f)
-            label_dict = {str(row[0]):float(row[1]) for row in reader}
-
-        self.data_list = []
-        image_path_list = sorted(list(image_path.iterdir()))
-        if not augment:
-            for path in image_path_list:
-                
-                self.data_list.append(
-                    {
-                        'path': path,
-                        'label':label_dict[path.name],
-                        'flip':False
-                    }
-                )
-        if augment:
-            for path in image_path_list:
-                
-                self.data_list.append(
-                    {
-                        'path': path,
-                        'label':239 - label_dict[path.name],
-                        'flip':True
-                    }
-                )
-        self.clamp = clamp
-        self.norm = norm
-        self.resize = resize
-        self.include_ventricles = include_ventricles
-        self.return_metadata = return_metadata
-    def __len__(self):
-        return len(self.data_list)
-    
-    def __getitem__(self,idx):
-        item = self.data_list[idx]
-        path = item['path']
-        label = item['label']
-        flip = item['flip']
-
-        t1c = nib.loadsave.load(path / (path.name + '-t1c.nii.gz'))
-        affine  = t1c.affine
-        header  = t1c.header
-        t1c = torch.from_numpy(t1c.get_fdata()).float()
-        t1n = torch.from_numpy(nib.loadsave.load(path / (path.name + '-t1n.nii.gz')).get_fdata()).float()
-        t2f = torch.from_numpy(nib.loadsave.load(path / (path.name + '-t2f.nii.gz')).get_fdata()).float()
-        t2w = torch.from_numpy(nib.loadsave.load(path / (path.name + '-t2w.nii.gz')).get_fdata()).float()
-        if self.include_ventricles:
-            ven = torch.from_numpy(nib.loadsave.load(path / (path.name + '-ven.nii.gz')).get_fdata()).float()
-        else:
-            ven  = torch.zeros_like(t1c)
-        if self.resize:
-            t1c = t1c[:,:,70:100]
-            t1n = t1n[:,:,70:100]
-            t2f = t2f[:,:,70:100]
-            t2w = t2w[:,:,70:100]
-            ven = ven[:,:,70:100]
-        if self.clamp: #5493.2344,  4979.1646, 20417.8848,  1825.0294
-            t1c = torch.clamp(t1c,min=0,max= 5493.2344)
-            t1n = torch.clamp(t1n,min=0,max = 4979.1646)
-            t2f = torch.clamp(t2f,min=0,max = 20417.8848)
-            t2w = torch.clamp(t2w,min=0,max =  1825.0294)
-
-        if self.norm:
-            t1c = (t1c - 282.0447) / 847.3163
-            t1n = (t1n - 245.2807) / 759.8339
-            t2f = (t2f - 371.4897) / 2182.2195
-            t2w = (t2w - 135.8492) / 359.5203
-        if self.include_ventricles:
-            whole_image = torch.stack([t1c,t1n,t2f,t2w,ven]).contiguous()   
-        else:
-            whole_image = torch.stack([t1c,t1n,t2f,t2w]).contiguous()
-        if flip:
-            whole_image = torch.flip(whole_image, dims=[1])
-        if self.return_metadata:
-            return {
-                'image':whole_image.contiguous(),
-                'label': label,
-                'header':header,
-                'affine':affine,
-                'name':path.name
-            }
-        else:
-            return {
-                'image':whole_image.contiguous(),
-                'label': label,
-            }
-    
-class BratsDataset(torch.utils.data.Dataset):
-    def __init__(self, image_path = Path('/work/grana_neuro/ASNR-MICCAI-BraTS2023-GLI-Challenge-TrainingData/'),
-                 clamp_min:list[float]|list[None] = [None for _ in range(4)],
-                 clamp_max:list[float]|list[None] = [None for _ in range(4)],
-                 means:list[float]|list[None] = [None for _ in range(4)],
-                 stds:list[float]|list[None] = [None for _ in range(4)],
-                 resize:bool=False,
-                 return_metadata:bool=False):
-        
-        self.data_list = sorted(list(image_path.iterdir()))
-        
-        self.clamp_min = clamp_min
-        self.clamp_max = clamp_max
-        self.means = means
-        self.stds = stds
-        self.resize = resize
-        self.return_metadata = return_metadata
-    def __len__(self):
-        return len(self.data_list)
-    
-    def __getitem__(self,idx):
-        path = self.data_list[idx]
-
-        t1c = nib.loadsave.load(path / (path.name + '-t1c.nii.gz'))
-        affine  = t1c.affine
-        header  = t1c.header
-        t1c = torch.from_numpy(t1c.get_fdata()).float()
-        t1n = torch.from_numpy(nib.loadsave.load(path / (path.name + '-t1n.nii.gz')).get_fdata()).float()
-        t2f = torch.from_numpy(nib.loadsave.load(path / (path.name + '-t2f.nii.gz')).get_fdata()).float()
-        t2w = torch.from_numpy(nib.loadsave.load(path / (path.name + '-t2w.nii.gz')).get_fdata()).float()
-
-
-        seg = torch.from_numpy(nib.loadsave.load(path / (path.name + '-seg.nii.gz')).get_fdata()).float()
-
-        if self.resize:
-            t1c = t1c[:,:,70:100]
-            t1n = t1n[:,:,70:100]
-            t2f = t2f[:,:,70:100]
-            t2w = t2w[:,:,70:100]
-
-            
-        t1c = torch.clamp(t1c, min=self.clamp_min[0], max=self.clamp_max[0])
-        t1n = torch.clamp(t1n, min=self.clamp_min[1], max=self.clamp_max[1])
-        t2f = torch.clamp(t2f, min=self.clamp_min[2], max=self.clamp_max[2])
-        t2w = torch.clamp(t2w, min=self.clamp_min[3], max=self.clamp_max[3])
-
-
-        if all(x is not None for x in self.means) and all(x is not None for x in self.stds):
-            t1c = (t1c - torch.tensor(self.means[0])) / torch.tensor(self.stds[0])
-            t1n = (t1n - torch.tensor(self.means[1])) / torch.tensor(self.stds[1])
-            t2f = (t2f - torch.tensor(self.means[2])) / torch.tensor(self.stds[2])
-            t2w = (t2w - torch.tensor(self.means[3])) / torch.tensor(self.stds[3])
-
-        whole_image = torch.stack([t1c,t1n,t2f,t2w])
-
-
-        if self.return_metadata:
-            return {
-                'image':whole_image.contiguous(),
-                'segmentation':seg.contiguous(),
-                'header':header,
-                'affine':affine,
-                'name':path.name
-            }
-        else:
-            return {
-                'image':whole_image.contiguous(),
-                'segmentation':seg.contiguous(),
-            }
 
 class JsonDataset(torch.utils.data.Dataset):
     def __init__(self,
@@ -512,13 +344,5 @@ def collate_with_metadata(batch):
             collated[key] = values
 
     return collated
-
-if __name__=='__main__':
-    input_path = Path('/work/grana_neuro/ASNR-MICCAI-BraTS2023-GLI-Challenge-TrainingData/')
-    set = BratsDataset(image_path=input_path,
-                       clamp_min=[0,0,0,0]
-                       )
-    seg = set[0]['segmentation']
-    print()
 
         
