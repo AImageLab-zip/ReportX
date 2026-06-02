@@ -1,0 +1,237 @@
+label,area,macroarea,depth,side,full_name
+0,background,,,,
+1,precentral_L,frontal,cortex,L,left precentral gyrus
+2,precentral_R,frontal,cortex,R,right precentral gyrus
+3,frontal_sup_L,frontal,cortex,L,left superior frontal gyrus
+4,frontal_sup_R,frontal,cortex,R,right superior frontal gyrus
+5,frontal_sup_orb_L,frontal,cortex,L,left superior frontal gyrus (orbital part)
+6,frontal_sup_orb_R,frontal,cortex,R,right superior frontal gyrus (orbital part)
+7,frontal_mid_L,frontal,cortex,L,left middle frontal gyrus
+8,frontal_mid_R,frontal,cortex,R,right middle frontal gyrus
+9,frontal_mid_orb_L,frontal,cortex,L,left middle frontal gyrus (orbital part)
+10,frontal_mid_orb_R,frontal,cortex,R,right middle frontal gyrus (orbital part)
+11,frontal_inf_oper_L,frontal,cortex,L,left inferior frontal gyrus (opercular part)
+12,frontal_inf_oper_R,frontal,cortex,R,right inferior frontal gyrus (opercular part)
+13,frontal_inf_tri_L,frontal,cortex,L,left inferior frontal gyrus (triangular part)
+14,frontal_inf_tri_R,frontal,cortex,R,right inferior frontal gyrus (triangular part)
+15,frontal_inf_orb_L,frontal,cortex,L,left inferior frontal gyrus (orbital part)
+16,frontal_inf_orb_R,frontal,cortex,R,right inferior frontal gyrus (orbital part)
+17,rolandic_oper_L,frontal,cortex,L,left rolandic operculum
+18,rolandic_oper_R,frontal,cortex,R,right rolandic operculum
+19,supp_motor_area_L,frontal,cortex,L,left supplementary motor area
+20,supp_motor_area_R,frontal,cortex,R,right supplementary motor area
+21,olfactory_L,frontal,cortex,L,left olfactory cortex
+22,olfactory_R,frontal,cortex,R,right olfactory cortex
+23,frontal_sup_medial_L,frontal,cortex,L,left medial superior frontal gyrus
+24,frontal_sup_medial_R,frontal,cortex,R,right medial superior frontal gyrus
+25,frontal_med_orb_L,frontal,cortex,L,left medial orbital frontal gyrus
+26,frontal_med_orb_R,frontal,cortex,R,right medial orbital frontal gyrus
+27,rectus_L,frontal,cortex,L,left gyrus rectus
+28,rectus_R,frontal,cortex,R,right gyrus rectus
+29,insula_L,insular,cortex,L,left insula
+30,insula_R,insular,cortex,R,right insula
+31,cingulum_ant_L,frontal,cortex,L,left anterior cingulate gyrus
+32,cingulum_ant_R,frontal,cortex,R,right anterior cingulate gyrus
+33,cingulum_mid_L,frontal,cortex,L,left middle cingulate gyrus
+34,cingulum_mid_R,frontal,cortex,R,right middle cingulate gyrus
+35,cingulum_post_L,parietal,cortex,L,left posterior cingulate gyrus
+36,cingulum_post_R,parietal,cortex,R,right posterior cingulate gyrus
+37,hippocampus_L,temporal,cortex,L,left hippocampus
+38,hippocampus_R,temporal,cortex,R,right hippocampus
+39,parahippocampal_L,temporal,cortex,L,left parahippocampal gyrus
+40,parahippocampal_R,temporal,cortex,R,right parahippocampal gyrus
+41,amygdala_L,temporal,cortex,L,left amygdala
+42,amygdala_R,temporal,cortex,R,right amygdala
+43,calcarine_L,occipital,cortex,L,left calcarine cortex
+44,calcarine_R,occipital,cortex,R,right calcarine cortex
+45,cuneus_L,occipital,cortex,L,left cuneus
+46,cuneus_R,occipital,cortex,R,right cuneus
+47,lingual_L,occipital,cortex,L,left lingual gyrus
+48,lingual_R,occipital,cortex,R,right lingual gyrus
+49,occipital_sup_L,occipital,cortex,L,left superior occipital gyrus
+50,occipital_sup_R,occipital,cortex,R,right superior occipital gyrus
+51,occipital_mid_L,occipital,cortex,L,left middle occipital gyrus
+52,occipital_mid_R,occipital,cortex,R,right middle occipital gyrus
+53,occipital_inf_L,occipital,cortex,L,left inferior occipital gyrus
+54,occipital_inf_R,occipital,cortex,R,right inferior occipital gyrus
+55,fusiform_L,temporal,cortex,L,left fusiform gyrus
+56,fusiform_R,temporal,cortex,R,right fusiform gyrus
+57,postcentral_L,parietal,cortex,L,left postcentral gyrus
+58,postcentral_R,parietal,cortex,R,right postcentral gyrus
+59,parietal_sup_L,parietal,cortex,L,left superior parietal gyrus
+60,parietal_sup_R,parietal,cortex,R,right superior parietal gyrus
+61,parietal_inf_L,parietal,cortex,L,left inferior parietal lobule
+62,parietal_inf_R,parietal,cortex,R,right inferior parietal lobule
+63,supramarginal_L,parietal,cortex,L,left supramarginal gyrus
+64,supramarginal_R,parietal,cortex,R,right supramarginal gyrus
+65,angular_L,parietal,cortex,L,left angular gyrus
+66,angular_R,parietal,cortex,R,right angular gyrus
+67,precuneus_L,parietal,cortex,L,left precuneus
+68,precuneus_R,parietal,cortex,R,right precuneus
+69,paracentral_Lobule_L,parietal,cortex,L,left paracentral lobule
+70,paracentral_Lobule_R,parietal,cortex,R,right paracentral lobule
+71,caudate_L,caudate,basal_nuclei,L,left caudate nucleus
+72,caudate_R,caudate,basal_nuclei,R,right caudate nucleus
+73,putamen_L,lentiform_nuclei,basal_nuclei,L,left putamen
+74,putamen_R,lentiform_nuclei,basal_nuclei,R,right putamen
+75,pallidum_L,lentiform_nuclei,basal_nuclei,L,left globus pallidus
+76,pallidum_R,lentiform_nuclei,basal_nuclei,R,right globus pallidus
+77,thalamus_L,thalamus,basal_nuclei,L,left thalamus
+78,thalamus_R,thalamus,basal_nuclei,R,right thalamus
+79,heschl_L,temporal,cortex,L,left Heschl's gyrus
+80,heschl_R,temporal,cortex,R,right Heschl's gyrus
+81,temporal_sup_L,temporal,cortex,L,left superior temporal gyrus
+82,temporal_sup_R,temporal,cortex,R,right superior temporal gyrus
+83,temporal_pole_sup_L,temporal,cortex,L,left superior temporal pole
+84,temporal_pole_sup_R,temporal,cortex,R,right superior temporal pole
+85,temporal_mid_L,temporal,cortex,L,left middle temporal gyrus
+86,temporal_mid_R,temporal,cortex,R,right middle temporal gyrus
+87,temporal_pole_mid_L,temporal,cortex,L,left middle temporal pole
+88,temporal_pole_mid_R,temporal,cortex,R,right middle temporal pole
+89,temporal_inf_L,temporal,cortex,L,left inferior temporal gyrus
+90,temporal_inf_R,temporal,cortex,R,right inferior temporal gyrus
+91,cerebelum_crus1_L,cerebellum,cortex,L,left cerebellar crus 1
+92,cerebelum_crus1_R,cerebellum,cortex,R,right cerebellar crus i
+93,cerebelum_crus2_L,cerebellum,cortex,L,left cerebellar crus 2
+94,cerebelum_crus2_R,cerebellum,cortex,R,right cerebellar crus 2
+95,cerebelum_3_L,cerebellum,cortex,L,left cerebellar lobule 3
+96,cerebelum_3_R,cerebellum,cortex,R,right cerebellar lobule 3
+97,cerebelum_4_5_L,cerebellum,cortex,L,left cerebellar lobules 4 and 5
+98,cerebelum_4_5_R,cerebellum,cortex,R,right cerebellar lobules 4 and 5
+99,cerebelum_6_L,cerebellum,cortex,L,left cerebellar lobule 6
+100,cerebelum_6_R,cerebellum,cortex,R,right cerebellar lobule 6
+101,cerebelum_7b_L,cerebellum,cortex,L,left cerebellar lobule 7b
+102,cerebelum_7b_R,cerebellum,cortex,R,right cerebellar lobule 7b
+103,cerebelum_8_L,cerebellum,cortex,L,left cerebellar lobule 8
+104,cerebelum_8_R,cerebellum,cortex,R,right cerebellar lobule 8
+105,cerebelum_9_L,cerebellum,cortex,L,left cerebellar lobule 9
+106,cerebelum_9_R,cerebellum,cortex,R,right cerebellar lobule 9
+107,cerebelum_10_L,cerebellum,cortex,L,left cerebellar lobule 10
+108,cerebelum_10_R,cerebellum,cortex,R,right cerebellar lobule 10
+128,vermis_1_2,cerebellum,cortex,median,cerebellar vermis lobules 1 and 2
+129,vermis_3,cerebellum,cortex,median,cerebellar vermis lobule 3
+130,vermis_4_5,cerebellum,cortex,median,cerebellar vermis lobules 4 and 5
+131,cerebellar_white_matter_R,cerebellum,deep_white_matter,R,right cerebellar white matter
+132,cerebellar_white_matter_L,cerebellum,deep_white_matter,L,left cerebellar white matter
+133,pons,brainstem,deep_white_matter,median,pons
+134,corpus_callosum,corpus_callosum,deep_white_matter,median,corpus callosum
+1001,precentral_L,frontal,subcortical_white_matter,L,left precentral white matter
+1002,precentral_R,frontal,subcortical_white_matter,R,right precentral white matter
+1003,frontal_sup_L,frontal,subcortical_white_matter,L,left superior frontal white matter
+1004,frontal_sup_R,frontal,subcortical_white_matter,R,right superior frontal white matter
+1005,frontal_sup_orb_L,frontal,subcortical_white_matter,L,left superior frontal white matter (orbital part)
+1006,frontal_sup_orb_R,frontal,subcortical_white_matter,R,right superior frontal white matter (orbital part)
+1007,frontal_mid_L,frontal,subcortical_white_matter,L,left middle frontal white matter
+1008,frontal_mid_R,frontal,subcortical_white_matter,R,right middle frontal white matter
+1009,frontal_mid_orb_L,frontal,subcortical_white_matter,L,left middle frontal white matter (orbital part)
+1010,frontal_mid_orb_R,frontal,subcortical_white_matter,R,right middle frontal white matter (orbital part)
+1011,frontal_inf_oper_L,frontal,subcortical_white_matter,L,left inferior frontal white matter (opercular part)
+1012,frontal_inf_oper_R,frontal,subcortical_white_matter,R,right inferior frontal white matter (opercular part)
+1013,frontal_inf_tri_L,frontal,subcortical_white_matter,L,left inferior frontal white matter (triangular part)
+1014,frontal_inf_tri_R,frontal,subcortical_white_matter,R,right inferior frontal white matter (triangular part)
+1015,frontal_inf_orb_L,frontal,subcortical_white_matter,L,left inferior frontal white matter (orbital part)
+1016,frontal_inf_orb_R,frontal,subcortical_white_matter,R,right inferior frontal white matter (orbital part)
+1017,rolandic_oper_L,frontal,subcortical_white_matter,L,left rolandic opercular white matter
+1018,rolandic_oper_R,frontal,subcortical_white_matter,R,right rolandic opercular white matter
+1019,supp_motor_area_L,frontal,subcortical_white_matter,L,left supplementary motor area white matter
+1020,supp_motor_area_R,frontal,subcortical_white_matter,R,right supplementary motor area white matter
+1021,olfactory_L,frontal,subcortical_white_matter,L,left olfactory white matter
+1022,olfactory_R,frontal,subcortical_white_matter,R,right olfactory white matter
+1023,frontal_sup_medial_L,frontal,subcortical_white_matter,L,left medial superior frontal white matter
+1024,frontal_sup_medial_R,frontal,subcortical_white_matter,R,right medial superior frontal white matter
+1025,frontal_med_orb_L,frontal,subcortical_white_matter,L,left medial orbital frontal white matter
+1026,frontal_med_orb_R,frontal,subcortical_white_matter,R,right medial orbital frontal white matter
+1027,rectus_L,frontal,subcortical_white_matter,L,left gyrus rectus white matter
+1028,rectus_R,frontal,subcortical_white_matter,R,right gyrus rectus white matter
+1029,insula_L,insular,subcortical_white_matter,L,left insular white matter
+1030,insula_R,insular,subcortical_white_matter,R,right insular white matter
+1031,cingulum_ant_L,frontal,subcortical_white_matter,L,left anterior cingulate white matter
+1032,cingulum_ant_R,frontal,subcortical_white_matter,R,right anterior cingulate white matter
+1033,cingulum_mid_L,frontal,subcortical_white_matter,L,left middle cingulate white matter
+1034,cingulum_mid_R,frontal,subcortical_white_matter,R,right middle cingulate white matter
+1035,cingulum_post_L,parietal,subcortical_white_matter,L,left posterior cingulate white matter
+1036,cingulum_post_R,parietal,subcortical_white_matter,R,right posterior cingulate white matter
+1037,hippocampus_L,temporal,subcortical_white_matter,L,left hippocampal white matter
+1038,hippocampus_R,temporal,subcortical_white_matter,R,right hippocampal white matter
+1039,parahippocampal_L,temporal,subcortical_white_matter,L,left parahippocampal white matter
+1040,parahippocampal_R,temporal,subcortical_white_matter,R,right parahippocampal white matter
+1041,amygdala_L,temporal,subcortical_white_matter,L,left amygdalar white matter
+1042,amygdala_R,temporal,subcortical_white_matter,R,right amygdalar white matter
+1043,calcarine_L,occipital,subcortical_white_matter,L,left calcarine white matter
+1044,calcarine_R,occipital,subcortical_white_matter,R,right calcarine white matter
+1045,cuneus_L,occipital,subcortical_white_matter,L,left cuneus white matter
+1046,cuneus_R,occipital,subcortical_white_matter,R,right cuneus white matter
+1047,lingual_L,occipital,subcortical_white_matter,L,left lingual white matter
+1048,lingual_R,occipital,subcortical_white_matter,R,right lingual white matter
+1049,occipital_sup_L,occipital,subcortical_white_matter,L,left superior occipital white matter
+1050,occipital_sup_R,occipital,subcortical_white_matter,R,right superior occipital white matter
+1051,occipital_mid_L,occipital,subcortical_white_matter,L,left middle occipital white matter
+1052,occipital_mid_R,occipital,subcortical_white_matter,R,right middle occipital white matter
+1053,occipital_inf_L,occipital,subcortical_white_matter,L,left inferior occipital white matter
+1054,occipital_inf_R,occipital,subcortical_white_matter,R,right inferior occipital white matter
+1055,fusiform_L,temporal,subcortical_white_matter,L,left fusiform white matter
+1056,fusiform_R,temporal,subcortical_white_matter,R,right fusiform white matter
+1057,postcentral_L,parietal,subcortical_white_matter,L,left postcentral white matter
+1058,postcentral_R,parietal,subcortical_white_matter,R,right postcentral white matter
+1059,parietal_sup_L,parietal,subcortical_white_matter,L,left superior parietal white matter
+1060,parietal_sup_R,parietal,subcortical_white_matter,R,right superior parietal white matter
+1061,parietal_inf_L,parietal,subcortical_white_matter,L,left inferior parietal white matter
+1062,parietal_inf_R,parietal,subcortical_white_matter,R,right inferior parietal white matter
+1063,supramarginal_L,parietal,subcortical_white_matter,L,left supramarginal white matter
+1064,supramarginal_R,parietal,subcortical_white_matter,R,right supramarginal white matter
+1065,angular_L,parietal,subcortical_white_matter,L,left angular white matter
+1066,angular_R,parietal,subcortical_white_matter,R,right angular white matter
+1067,precuneus_L,parietal,subcortical_white_matter,L,left precuneus white matter
+1068,precuneus_R,parietal,subcortical_white_matter,R,right precuneus white matter
+1069,paracentral_Lobule_L,parietal,subcortical_white_matter,L,left paracentral lobule white matter
+1070,paracentral_Lobule_R,parietal,subcortical_white_matter,R,right paracentral lobule white matter
+1079,heschl_L,temporal,subcortical_white_matter,L,left Heschl's gyrus white matter
+1080,heschl_R,temporal,subcortical_white_matter,R,right Heschl's gyrus white matter
+1081,temporal_sup_L,temporal,subcortical_white_matter,L,left superior temporal white matter
+1082,temporal_sup_R,temporal,subcortical_white_matter,R,right superior temporal white matter
+1083,temporal_pole_sup_L,temporal,subcortical_white_matter,L,left superior temporal pole white matter
+1084,temporal_pole_sup_R,temporal,subcortical_white_matter,R,right superior temporal pole white matter
+1085,temporal_mid_L,temporal,subcortical_white_matter,L,left middle temporal white matter
+1086,temporal_mid_R,temporal,subcortical_white_matter,R,right middle temporal white matter
+1087,temporal_pole_mid_L,temporal,subcortical_white_matter,L,left middle temporal pole white matter
+1088,temporal_pole_mid_R,temporal,subcortical_white_matter,R,right middle temporal pole white matter
+1089,temporal_inf_L,temporal,subcortical_white_matter,L,left inferior temporal white matter
+1090,temporal_inf_R,temporal,subcortical_white_matter,R,right inferior temporal white matter
+1091,cerebelum_crus1_L,cerebellum,subcortical_white_matter,L,left cerebellar crus 1 white matter
+1092,cerebelum_crus1_R,cerebellum,subcortical_white_matter,R,right cerebellar crus 1 white matter
+1093,cerebelum_crus2_L,cerebellum,subcortical_white_matter,L,left cerebellar crus 2 white matter
+1094,cerebelum_crus2_R,cerebellum,subcortical_white_matter,R,right cerebellar crus 2 white matter
+1095,cerebelum_3_L,cerebellum,subcortical_white_matter,L,left cerebellar lobule 3 white matter
+1096,cerebelum_3_R,cerebellum,subcortical_white_matter,R,right cerebellar lobule 3 white matter
+1097,cerebelum_4_5_L,cerebellum,subcortical_white_matter,L,left cerebellar lobules 4 and 5 white matter
+1098,cerebelum_4_5_R,cerebellum,subcortical_white_matter,R,right cerebellar lobules 4 and 5 white matter
+1099,cerebelum_6_L,cerebellum,subcortical_white_matter,L,left cerebellar lobule 6 white matter
+1100,cerebelum_6_R,cerebellum,subcortical_white_matter,R,right cerebellar lobule 6 white matter
+1101,cerebelum_7b_L,cerebellum,subcortical_white_matter,L,left cerebellar lobule 7b white matter
+1102,cerebelum_7b_R,cerebellum,subcortical_white_matter,R,right cerebellar lobule 7b white matter
+1103,cerebelum_8_L,cerebellum,subcortical_white_matter,L,left cerebellar lobule 8 white matter
+1104,cerebelum_8_R,cerebellum,subcortical_white_matter,R,right cerebellar lobule 8 white matter
+1105,cerebelum_9_L,cerebellum,subcortical_white_matter,L,left cerebellar lobule 9 white matter
+1106,cerebelum_9_R,cerebellum,subcortical_white_matter,R,right cerebellar lobule 9 white matter
+1107,cerebelum_10_L,cerebellum,subcortical_white_matter,L,left cerebellar lobule 10 white matter
+1108,cerebelum_10_R,cerebellum,subcortical_white_matter,R,right cerebellar lobule 10 white matter
+1128,vermis_6,cerebellum,cortex,median,cerebellar vermis lobule 6
+1129,vermis_7,cerebellum,cortex,median,cerebellar vermis lobule 7
+1130,vermis_8,cerebellum,cortex,median,cerebellar vermis lobule 8
+1131,cerebellar_white_matter_R,cerebellum,deep_white_matter,R,right cerebellar white matter
+1132,cerebellar_white_matter_L,cerebellum,deep_white_matter,L,left cerebellar white matter
+2001,frontal_white_matter_L,frontal,deep_white_matter,L,left frontal deep white matter
+2002,frontal_white_matter_R,frontal,deep_white_matter,R,right frontal deep white matter
+2003,occipital_white_matter_L,occipital,deep_white_matter,L,left occipital deep white matter
+2004,occipital_white_matter_R,occipital,deep_white_matter,R,right occipital deep white matter
+2005,parietal_white_matter_L,parietal,deep_white_matter,L,left parietal deep white matter
+2006,parietal_white_matter_R,parietal,deep_white_matter,R,right parietal deep white matter
+2007,temporal_white_matter_L,temporal,deep_white_matter,L,left temporal deep white matter
+2008,temporal_white_matter_R,temporal,deep_white_matter,R,right temporal deep white matter
+2009,medulla_oblongata,brainstem,deep_white_matter,median,medulla oblongata
+2010,midbrain_L,brainstem,deep_white_matter,L,left midbrain
+2011,midbrain_R,brainstem,deep_white_matter,R,right midbrain
+2012,insular_white_matter_L,insular,deep_white_matter,L,left insular deep white matter
+2013,insular_white_matter_R,insular,deep_white_matter,R,right insular deep white matter
+2014,capsular_system_L,lentiform_nuclei,deep_white_matter,L,left capsular system
+2015,capsular_system_R,lentiform_nuclei,deep_white_matter,R,right capsular system

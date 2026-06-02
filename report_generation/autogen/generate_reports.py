@@ -17,7 +17,7 @@ This script builds a B2T dataset by combining:
   - A postprocessed anatomical legend (CSV).
 
 For each specified threshold value, a new dataset directory is created:
-    <output-root>/BraTS_B2T_t{threshold*100}
+    <output-root>/ReportX_t{threshold*100}
 
 Within each subject folder, two files are generated:
     - generated.json   Structured representation of extracted features.
@@ -32,7 +32,7 @@ The `threshold` parameter controls filtering or spatial inclusion criteria
 inside `JsonDataset` (e.g., region overlap threshold).
 
 Command-line arguments:
-  --output-root      Root directory where B2T datasets will be created.
+  --output-root      Root directory where the ReportX datasets will be created.
   --thresholds       One or more threshold values (e.g., 0.0 0.2 0.5).
   --num-workers      Number of DataLoader workers (default: 8).
 
@@ -43,9 +43,9 @@ Command-line arguments:
 """
 parser = ArgumentParser()
 parser.add_argument("--output-root", type=Path, required=True,
-                    help="Root directory where B2T datasets will be generated.")
-parser.add_argument("--legend-path", type=Path, required=True,
-                    help="Path to legend_postprocessed.csv.")
+                    help="Root directory where the ReportX datasets will be generated.")
+parser.add_argument("--legend-path", type=Path,
+                    help="Path to legend_postprocessed.csv.",default=Path(__file__).parent.parent/'resources'/'legend_postprocessed.csv')
 parser.add_argument("--thresholds", type=float, nargs="+", default=[0.0],
                     help="List of thresholds (e.g. --thresholds 0.0 0.2 0.5).")
 parser.add_argument("--num-workers", type=int, default=8,
@@ -64,7 +64,7 @@ args = parser.parse_args()
 
 pbar = tqdm(args.thresholds,desc='Starting')
 for th in pbar:
-    pbar.set_description(f'Generating B2T dataset with threshold: {th}')
+    pbar.set_description(f'Generating automatic ReportX dataset with threshold: {th}')
     dataset = JsonDataset(cc_path=args.cc_path,
                           atlas_path=args.atlas_path,
                           legend_path=args.legend_path,
@@ -72,7 +72,7 @@ for th in pbar:
                           threshold = th,
                           )
     loader = torch.utils.data.DataLoader(dataset,batch_size=None,num_workers=args.num_workers,shuffle=False)
-    output_path = args.output_root / f"BraTS_B2T_t{int(th * 100)}"
+    output_path = args.output_root / f"ReportX_t{int(th * 100)}"
     if output_path.exists():
         while True:
             answer = input(

@@ -131,3 +131,5 @@ scripts/create_qatacov_split_variants.py
 __MACOSX/
 
 README_old.md
+sbatch_files/
+report_generation/onetime

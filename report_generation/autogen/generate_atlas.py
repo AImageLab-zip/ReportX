@@ -32,8 +32,8 @@ Command-line arguments:
 parser = argparse.ArgumentParser()
 parser.add_argument("--input-dir",type=Path)
 parser.add_argument("--output-dir",type=Path)
-parser.add_argument("--t1-atlas-path",type=Path)
-parser.add_argument("--areas-atlas-path",type=Path)
+parser.add_argument("--t1-atlas-path",type=Path,default=Path(__file__).parent.parent/'resources'/'T1_brain.nii.gz')
+parser.add_argument("--areas-atlas-path",type=Path,default=Path(__file__).parent.parent/'resources'/'areas.nii.gz')
 
 args = parser.parse_args()
 base_path=Path(__file__).parent.parent.parent
@@ -61,7 +61,8 @@ atlas = ants.resample_image_to_target(
 
 
 for sub in tqdm(list(args.input_dir.iterdir())):
-
+    t1_subj  = ants.image_read(str(sub/f'{sub.name}-t1n.nii.gz'))
+    
     tx_dir = args.output_dir / sub.name / "transforms"
     tx_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy(sub/f'{sub.name}-t1n.nii.gz',args.output_dir / sub.name/f'{sub.name}-t1n.nii.gz')

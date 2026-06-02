@@ -1,4 +1,4 @@
-from src.utils.geometries import make_cc_labels
+from report_generation.utils.geometries import make_cc_labels
 
 from torch.utils.data import DataLoader
 from tqdm import tqdm

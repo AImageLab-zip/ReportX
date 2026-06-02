@@ -34,16 +34,16 @@ Command-line arguments:
   --vision-path             Path to vision ROI mask in atlas space (NIfTI).
 """
 parser = ArgumentParser()
-parser.add_argument('--atlas-path',type=Path,required=True)
+parser.add_argument('--input-path',type=Path,required=True)
 parser.add_argument('--output-path',type=Path,required=True)
 
-parser.add_argument("--motor-path", type=str, required=True)
-parser.add_argument("--speech-motor-path", type=str, required=True)
-parser.add_argument("--speech-receptive-path", type=str, required=True)
-parser.add_argument("--vision-path", type=str, required=True)
+parser.add_argument("--motor-path", type=str, default=Path(__file__).parent.parent / 'resources'/'motor.nii.gz')
+parser.add_argument("--speech-motor-path", type=str, default=Path(__file__).parent.parent / 'resources'/'speech_motor.nii.gz')
+parser.add_argument("--speech-receptive-path", type=str, default=Path(__file__).parent.parent / 'resources'/'speech_receptive.nii.gz')
+parser.add_argument("--vision-path", type=str, default=Path(__file__).parent.parent / 'resources'/'vision.nii.gz')
 args = parser.parse_args()
 
-atlas_path = args.atlas_path
+input_path = args.input_path
 output_path = args.output_path
 
 if output_path.exists():
@@ -116,7 +116,7 @@ def process_subject(sub):
     ants.image_write(warped_vision, str(output_sub / 'vision.nii.gz'))
 
 
-subjects = list(atlas_path.iterdir())
+subjects = list(input_path.iterdir())
 
 with ThreadPoolExecutor(max_workers=4) as executor:
     futures = [executor.submit(process_subject, sub) for sub in subjects]
