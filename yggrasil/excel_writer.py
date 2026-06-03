@@ -1,5 +1,6 @@
 import json
 import sys
+from pathlib import Path
 
 import pandas as pd
 
@@ -31,9 +32,16 @@ def save_splits_to_excel(path: str, splits: dict, annotators: dict):
             worksheet["A1"] = f"Annotator: {ann_name}"
 
 
+def save_splits_to_json(path: str, splits: dict):
+    json_path = Path(path).with_suffix(".json")
+    with open(json_path, "w") as f:
+        json.dump(splits, f, indent=2)
+
+
 def main():
     payload = json.loads(sys.stdin.read())
     save_splits_to_excel(payload["path"], payload["splits"], payload["annotators"])
+    save_splits_to_json(payload["path"], payload["splits"])
 
 
 if __name__ == "__main__":
