@@ -25,6 +25,8 @@ from PyQt6.QtWidgets import (
 
 INPUT_JSON = Path(__file__).parent.parent / "split_files" / "BraTS23.json"
 DEFAULT_EXCEL = Path(__file__).parent / "annotation_splits.xlsx"
+REPORTX_JSON = Path(__file__).parent / "reportx.json"
+REPORTX_KEY = "REPORTX"
 
 # ── Dark Catppuccin palette ─────────────────────────────────────────────────
 BG        = "#1e1e2e"
@@ -166,11 +168,25 @@ def patient_id(sample: str) -> str:
     return "-".join(sample.split("-")[:-1])
 
 
-def build_pool(data: dict, train_r: int, val_r: int, test_r: int) -> list:
+def load_reportx_samples() -> list:
+    """Cases always pre-assigned to the REPORTX clinician (one fulfilled repeat each)."""
+    try:
+        with open(REPORTX_JSON) as f:
+            samples = json.load(f)
+    except FileNotFoundError:
+        return []
+    return sorted(set(samples))
+
+
+def build_pool(data: dict, train_r: int, val_r: int, test_r: int, reportx_ids: set = frozenset()) -> list:
+    """Build the assignment pool, accounting for one repeat already fulfilled by REPORTX."""
     pool = []
-    for s in data["train"]: pool.extend([s] * train_r)
-    for s in data["val"]:   pool.extend([s] * val_r)
-    for s in data["test"]:  pool.extend([s] * test_r)
+    repeats = {"train": train_r, "val": val_r, "test": test_r}
+    for subset, base_repeat in repeats.items():
+        for s in data[subset]:
+            n = base_repeat - (1 if s in reportx_ids else 0)
+            if n > 0:
+                pool.extend([s] * n)
     return pool
 
 
@@ -269,6 +285,8 @@ class SplitApp(QMainWindow):
         self._save_process = None
 
         self._load_json()
+        self._splits[REPORTX_KEY] = load_reportx_samples()
+        self._annotators[REPORTX_KEY] = REPORTX_KEY
         self._build_ui()
         self.setStyleSheet(MAIN_STYLE)
         self._autoload_excel()
@@ -414,11 +432,13 @@ class SplitApp(QMainWindow):
             if reply != QMessageBox.StandardButton.Yes:
                 return
 
+        reportx_samples = load_reportx_samples()
         pool = build_pool(
             self._json_data,
             self._train_r.value(),
             self._val_r.value(),
             self._test_r.value(),
+            reportx_ids=set(reportx_samples),
         )
         self._splits = assign_to_buckets(
             pool,
@@ -428,6 +448,8 @@ class SplitApp(QMainWindow):
             self._seed.value(),
         )
         self._annotators = {k: "" for k in self._splits}
+        self._splits[REPORTX_KEY] = reportx_samples
+        self._annotators[REPORTX_KEY] = REPORTX_KEY
         self._refresh_tabs()
         self._update_stats()
         self._update_controls_enabled()
@@ -436,9 +458,11 @@ class SplitApp(QMainWindow):
     def _refresh_tabs(self):
         self._tabs.clear()
         ordered_keys = sorted(
-            [k for k in self._splits if k != "REMAINING"],
+            [k for k in self._splits if k not in ("REMAINING", REPORTX_KEY)],
             key=split_sort_key,
         )
+        if REPORTX_KEY in self._splits:
+            ordered_keys.append(REPORTX_KEY)
         if "REMAINING" in self._splits:
             ordered_keys.append("REMAINING")
 
@@ -476,6 +500,8 @@ class SplitApp(QMainWindow):
         table.setRowCount(len(samples))
 
         def delete_row(row_idx, table_key):
+            if table_key == REPORTX_KEY:
+                return
             if row_idx < 0 or row_idx >= len(self._splits[table_key]):
                 return
             sample = self._splits[table_key][row_idx]
@@ -525,15 +551,19 @@ class SplitApp(QMainWindow):
         if not self._splits:
             self._stats_label.setText("No splits generated")
             return
-        total = sum(len(v) for v in self._splits.values())
+        excluded = {"REMAINING", REPORTX_KEY}
+        clin_keys = [k for k in self._splits if k not in excluded]
+        total = sum(len(self._splits[k]) for k in clin_keys)
         rem = len(self._splits.get("REMAINING", []))
-        n_clin = len(self._splits) - (1 if "REMAINING" in self._splits else 0)
+        reportx_n = len(self._splits.get(REPORTX_KEY, []))
+        n_clin = len(clin_keys)
         self._stats_label.setText(
             f"📊 Stats\n\n"
             f"Clinicians: {n_clin}\n"
-            f"Total assigned: {total - rem}\n"
+            f"Total assigned: {total}\n"
+            f"REPORTX (fixed): {reportx_n}\n"
             f"Remaining pool: {rem}\n"
-            f"Average/clinician: {(total - rem) // max(n_clin, 1)}"
+            f"Average/clinician: {total // max(n_clin, 1)}"
         )
 
     # ── Add / Edit / Delete ─────────────────────────────────────────────────
@@ -594,8 +624,8 @@ class SplitApp(QMainWindow):
         if not key:
             QMessageBox.warning(self, "Warning", "Select a clinician tab first")
             return
-        if key == "REMAINING":
-            QMessageBox.warning(self, "Warning", "Cannot add to REMAINING")
+        if key in ("REMAINING", REPORTX_KEY):
+            QMessageBox.warning(self, "Warning", f"Cannot add to {key}")
             return
         rem = self._splits.get("REMAINING", [])
         if not rem:
@@ -631,8 +661,8 @@ class SplitApp(QMainWindow):
         if not key:
             QMessageBox.warning(self, "Warning", "Select a clinician tab first")
             return
-        if key == "REMAINING":
-            QMessageBox.warning(self, "Warning", "Cannot delete REMAINING")
+        if key in ("REMAINING", REPORTX_KEY):
+            QMessageBox.warning(self, "Warning", f"Cannot delete {key}")
             return
         reply = QMessageBox.question(
             self, "Confirm", f"Delete {key} and return samples to REMAINING?",
@@ -757,6 +787,8 @@ class SplitApp(QMainWindow):
 
     def _autoload_excel(self):
         if not DEFAULT_EXCEL.exists():
+            self._refresh_tabs()
+            self._update_stats()
             self._update_controls_enabled()
             return
 
@@ -795,9 +827,13 @@ class SplitApp(QMainWindow):
                 if sample_val and isinstance(sample_val, str):
                     samples.append(sample_val)
 
-            if samples or sheet_name == "REMAINING":
-                self._splits[sheet_name] = samples
-                self._annotators[sheet_name] = ann_name
+            self._splits[sheet_name] = samples
+            self._annotators[sheet_name] = ann_name
+
+        # REPORTX is always recomputed from the canonical source file,
+        # regardless of what was saved in the loaded workbook.
+        self._splits[REPORTX_KEY] = load_reportx_samples()
+        self._annotators[REPORTX_KEY] = REPORTX_KEY
 
         self._refresh_tabs()
         self._update_stats()
