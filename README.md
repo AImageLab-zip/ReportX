@@ -66,6 +66,7 @@ source .venv/bin/activate
 3. [Automatic Report Generation](/docs/report_gen.md)
 4. [Agreement](/docs/agreement.md)
 5. [Yggrasil](/docs/yggdrasil.md)
+6. [Concept Coverage Score & Template Adherence](/docs/ccs_ta.md)
 
 ## Extending
 This is a fork of a universal framework from https://github.com/kev98/Medical-Image-Segmentation. An overview on using and extending it with your own implementation can be found [here](/docs/extending_framework.md)
